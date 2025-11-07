@@ -45,8 +45,9 @@ public:
 
         if (props.type("values") == Properties::Type::String) {
             std::vector<std::string> values_str =
-                string::tokenize(props.string("values"), " ,");
-            values.reserve(values_str.size());
+                string::tokenize(props.get<std::string_view>("values"), " ,");
+            std::vector<ScalarFloat> data;
+            data.reserve(values_str.size());
 
             for (const auto &s : values_str) {
                 try {
@@ -61,8 +62,9 @@ public:
 
         if (props.type("nodes") == Properties::Type::String) {
             std::vector<std::string> nodes_str =
-                string::tokenize(props.string("nodes"), " ,");
-            nodes.reserve(nodes_str.size());
+                string::tokenize(props.get<std::string_view>("nodes"), " ,");
+            std::vector<ScalarFloat> data;
+            data.reserve(nodes_str.size());
 
             for (const auto &s : nodes_str) {
                 try {
@@ -94,10 +96,10 @@ public:
     }
 
     void traverse(TraversalCallback *callback) override {
-        callback->put_parameter("values", m_distr.pdf(),
+        callback->put("values", m_distr.pdf(),
                                 ParamFlags::Differentiable |
                                     ParamFlags::Discontinuous);
-        callback->put_parameter("nodes", m_distr.nodes(),
+        callback->put("nodes", m_distr.nodes(),
                                 ParamFlags::Differentiable |
                                     ParamFlags::Discontinuous);
     }
@@ -149,6 +151,5 @@ private:
     IrregularContinuousDistribution<Float> m_distr;
 };
 
-MI_IMPLEMENT_CLASS_VARIANT(IrregularTabulatedPhaseFunction, PhaseFunction)
-MI_EXPORT_PLUGIN(IrregularTabulatedPhaseFunction, "Tabulated phase function")
+MI_EXPORT_PLUGIN(IrregularTabulatedPhaseFunction)
 NAMESPACE_END(mitsuba)
