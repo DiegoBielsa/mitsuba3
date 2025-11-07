@@ -53,6 +53,29 @@ public:
     MediumInteraction3f sample_interaction(const Ray3f &ray, Float sample,
                                            UInt32 channel, Mask active) const;
 
+        /**
+     * \brief Sample a free-flight distance in the medium.
+     *
+     * This function samples a (tentative) free-flight distance according to an
+     * exponential transmittance. It is then up to the integrator to then decide
+     * whether the MediumInteraction corresponds to a real or null scattering
+     * event.
+     *
+     * \param ray      Ray, along which a distance should be sampled
+     * \param sample   A uniformly distributed random sample
+     * \param channel  The channel according to which we will sample the
+     * free-flight distance. This argument is only used when rendering in RGB
+     * modes.
+     * \param avgVertexPath   Average number of vertices per path within the medium
+     * \param tDist    Total measured distnace in the transient domain
+     *
+     * \return         This method returns a MediumInteraction.
+     *                 The MediumInteraction will always be valid,
+     *                 except if the ray missed the Medium's bounding box.
+     */
+    MediumInteraction3f sample_interaction_temporal(const Ray3f &ray, Float sample,
+                                           UInt32 channel, UInt32 avgVertexPath, Float tDist, Mask active) const;
+
     /**
      * \brief Compute the transmittance and PDF
      *
@@ -124,6 +147,7 @@ DRJIT_CALL_TEMPLATE_BEGIN(mitsuba::Medium)
     DRJIT_CALL_METHOD(get_majorant)
     DRJIT_CALL_METHOD(intersect_aabb)
     DRJIT_CALL_METHOD(sample_interaction)
+    DRJIT_CALL_METHOD(sample_interaction_temporal)
     DRJIT_CALL_METHOD(transmittance_eval_pdf)
     DRJIT_CALL_METHOD(get_scattering_coefficients)
 DRJIT_CALL_END()

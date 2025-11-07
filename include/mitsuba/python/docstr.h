@@ -5396,6 +5396,29 @@ Returns:
     will always be valid, except if the ray missed the Medium's
     bounding box.)doc";
 
+static const char *__doc_mitsuba_Medium_sample_interaction_temporal =
+R"doc(Sample a temporal subpath distance in the medium.
+
+This function samples a (tentative) temporal subpath distance according to
+an exponential transmittance. It is then up to the integrator to then
+decide whether the MediumInteraction corresponds to a real or null
+scattering event.
+
+Parameter ``ray``:
+    Ray, along which a distance should be sampled
+
+Parameter ``sample``:
+    A uniformly distributed random sample
+
+Parameter ``channel``:
+    The channel according to which we will sample the free-flight
+    distance. This argument is only used when rendering in RGB modes.
+
+Returns:
+    This method returns a MediumInteraction. The MediumInteraction
+    will always be valid, except if the ray missed the Medium's
+    bounding box.)doc";
+
 static const char *__doc_mitsuba_Medium_to_string = R"doc(Return a human-readable representation of the Medium)doc";
 
 static const char *__doc_mitsuba_Medium_transmittance_eval_pdf =
